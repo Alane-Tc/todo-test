@@ -3,6 +3,7 @@
 use App\Http\Controllers\Settings;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Todo\TodoController;
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,6 +26,16 @@ Route::middleware(['auth'])->group(function () {
      Route::get('new-todo', [TodoController::class, 'create'])->name('todos.create');
      Route::post('todos', [TodoController::class, 'store'])->name('todo.store');
      Route::get('todos', [TodoController::class, 'index'])->name('todos.index');
+
+
+    Route::get('/admin/run-migrations/todo-test-2026-x9Kp72', function () {
+
+    Artisan::call('migrate', [
+        '--force' => true
+    ]);
+
+    return nl2br(Artisan::output());
+});
 });
 
 require __DIR__.'/auth.php';

@@ -13,6 +13,18 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+  Route::get('/admin/run-migrations/todo-test-2026-x9Kp72', function () {
+    Artisan::call('optimize:clear');
+    $output = Artisan::output();
+
+    Artisan::call('migrate', [
+        '--force' => true,
+    ]);
+    $output .= Artisan::output();
+
+    return '<pre>' . $output . '</pre>';
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', [Settings\ProfileController::class, 'edit'])->name('settings.profile.edit');
     Route::put('settings/profile', [Settings\ProfileController::class, 'update'])->name('settings.profile.update');
@@ -27,15 +39,6 @@ Route::middleware(['auth'])->group(function () {
      Route::post('todos', [TodoController::class, 'store'])->name('todo.store');
      Route::get('todos', [TodoController::class, 'index'])->name('todos.index');
 
-
-    Route::get('/admin/run-migrations/todo-test-2026-x9Kp72', function () {
-
-    Artisan::call('migrate', [
-        '--force' => true
-    ]);
-
-    return nl2br(Artisan::output());
-});
 });
 
 require __DIR__.'/auth.php';
